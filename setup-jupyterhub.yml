@@ -1,5 +1,8 @@
+# TODO: make paths variables...
+
 - name: Setup configs
-  hosts: roman
+  #hosts: roman
+  hosts: localhost
   connection: local
 
   tasks:
@@ -18,9 +21,19 @@
           - "env - {{ env }}"
           - "account_id - {{ account_id }}"
           - "ecr_account_id - {{ ecr_account_id }}"
-    - name: Create jupyterhub-deploy setup-env
+
+    - name: Check if setup-env exists
+      stat:
+        path: /home/ec2-user/jupyterhub-deploy/setup-env
+      register: setup
+
+    - name: Backup setup-env if it exists
+      when: setup.stat.exists
+      command: mv /home/ec2-user/jupyterhub-deploy/setup-env /home/ec2-user/jupyterhub-deploy/setup-env.ansible-backup
+
+    - name: Create setup-env
       template:
         src: templates/setup-env.j2
-        dest: /home/ec2-user/jupyterhub-deploy/test-setup-env
+        dest: /home/ec2-user/jupyterhub-deploy/setup-env
 
 

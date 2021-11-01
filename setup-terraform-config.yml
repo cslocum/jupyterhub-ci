@@ -3,9 +3,15 @@
   connection: local
 
   tasks:
-    - name: TEST creating file
-      copy:
-        dest: /home/ec2-user/terraform-deploy/foobar.txt
-        content: |
-          woop!
-          happy Monday :p 
+    - name: Get SSM parameters
+      set_fact:
+        env: "{{ lookup('aws_ssm', 'environment') }}"
+
+    - name: Get environment variables
+      set_fact:
+        account_id: "{{ lookup('env', 'ACCOUNT_ID') }}"
+        ecr_account_id: "{{ lookup('env', 'ECR_ACCOUNT_ID') }}"
+
+    - name: Show gathered variables
+      debug: msg="ENV = {{ env }}, ACCOUNT_ID = {{ account_id }}, ECR_ACCOUNT_ID = {{ ecr_account_id }}"
+

@@ -1,6 +1,4 @@
-# TODO: make paths variables...
-
-- name: Setup configs
+- name: Configure JupyterHub
   hosts: roman
   connection: local
 
@@ -15,7 +13,7 @@
         ecr_account_id: "{{ lookup('env', 'ECR_ACCOUNT_ID') }}"
         admin_arn: "{{ lookup('env', 'ADMIN_ROLENAME') }}"
 
-    - name: Get admin role name from variable
+    - name: Get admin role name from ARN
       shell: echo {{ admin_arn }} | awk -F/ '{print $NF}'
       register: admin_rolename
 
@@ -36,11 +34,7 @@
       when: setup.stat.exists
       command: mv "{{ jh_dir }}/setup-env" "{{ jh_dir }}/setup-env.ansible-backup"
 
-    - name: Create setup-env
+    - name: Create setup-env from template
       template:
         src: templates/setup-env.j2
         dest: "{{ jh_dir }}/setup-env"
-      vars:
-        admin_rolename: admin_rolename
-
-

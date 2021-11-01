@@ -11,7 +11,7 @@ export USE_FROZEN={{ use_frozen }}         # use 0 for loosely pinned package ve
 
 export ACCOUNT_ID={{ account_id }}
 export ECR_ACCOUNT_ID={{ ecr_account_id }} # set to ACCOUNT_ID for local ECR, or central account ID for central ECR
-export ADMIN_ROLENAME=aws-admin-role
+export ADMIN_ROLENAME={{ admin_rolename.stdout }}
 export DATADOG_API_KEY_ID=look-in-aws-sm
 
 # Note that unscanned- tags are pushed, pulled, and scanned but

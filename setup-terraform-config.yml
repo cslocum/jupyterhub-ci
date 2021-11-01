@@ -1,5 +1,5 @@
-- name: Setup terraform configs
-  hosts: localhost
+- name: Setup configs
+  hosts: roman
   connection: local
 
   tasks:
@@ -13,5 +13,14 @@
         ecr_account_id: "{{ lookup('env', 'ECR_ACCOUNT_ID') }}"
 
     - name: Show gathered variables
-      debug: msg="ENV = {{ env }}, ACCOUNT_ID = {{ account_id }}, ECR_ACCOUNT_ID = {{ ecr_account_id }}"
+      debug:
+        msg:
+          - "env - {{ env }}"
+          - "account_id - {{ account_id }}"
+          - "ecr_account_id - {{ ecr_account_id }}"
+    - name: Create jupyterhub-deploy setup-env
+      template:
+        src: templates/setup-env.j2
+        dest: /home/ec2-user/jupyterhub-deploy/test-setup-env
+
 

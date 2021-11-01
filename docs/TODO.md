@@ -1,9 +1,12 @@
 
+*** How can variables be shared between playbooks?
+
+
 ## terraform-deploy
 
 Make configs for:
   - backend.conf (x2)
-  - $DEPLOYMENT_NAME.tfvars (x2)
+  - $DEPLOYMENT_NAME.tfvars (x2) # https://github.com/spacetelescope/terraform-deploy/blob/main/ephemeral-setup/your-vars.tfvars.template
 
 Execute:
   - init terraform

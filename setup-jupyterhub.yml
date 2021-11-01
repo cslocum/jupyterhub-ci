@@ -1,5 +1,5 @@
 - name: Configure JupyterHub
-  hosts: roman
+  hosts: all
   connection: local
 
   tasks:

@@ -1,8 +1,7 @@
 # TODO: make paths variables...
 
 - name: Setup configs
-  #hosts: roman
-  hosts: localhost
+  hosts: roman
   connection: local
 
   tasks:
@@ -14,6 +13,11 @@
       set_fact:
         account_id: "{{ lookup('env', 'ACCOUNT_ID') }}"
         ecr_account_id: "{{ lookup('env', 'ECR_ACCOUNT_ID') }}"
+        admin_arn: "{{ lookup('env', 'ADMIN_ROLENAME') }}"
+
+    - name: Get admin role name from variable
+      shell: echo {{ admin_arn }} | awk -F/ '{print $NF}'
+      register: admin_rolename
 
     - name: Show gathered variables
       debug:
@@ -21,19 +25,22 @@
           - "env - {{ env }}"
           - "account_id - {{ account_id }}"
           - "ecr_account_id - {{ ecr_account_id }}"
+          - "admin_rolename - {{ admin_rolename.stdout }}"
 
     - name: Check if setup-env exists
       stat:
-        path: /home/ec2-user/jupyterhub-deploy/setup-env
+        path: "{{ jh_dir }}/setup-env"
       register: setup
 
     - name: Backup setup-env if it exists
       when: setup.stat.exists
-      command: mv /home/ec2-user/jupyterhub-deploy/setup-env /home/ec2-user/jupyterhub-deploy/setup-env.ansible-backup
+      command: mv "{{ jh_dir }}/setup-env" "{{ jh_dir }}/setup-env.ansible-backup"
 
     - name: Create setup-env
       template:
         src: templates/setup-env.j2
-        dest: /home/ec2-user/jupyterhub-deploy/setup-env
+        dest: "{{ jh_dir }}/setup-env"
+      vars:
+        admin_rolename: admin_rolename
 
 

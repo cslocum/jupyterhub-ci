@@ -5,9 +5,9 @@
 
 # ----------------- basic inputs, must set for deployment --------------
 
-export DEPLOYMENT_NAME=cluster_name  # roman, jwebbinar, tike
+export DEPLOYMENT_NAME={{ cluster_name }}  # roman, jwebbinar, tike
 export ENVIRONMENT={{ env }}               # sandbox, dev, test, prod
-export USE_FROZEN=1                        # use 0 for loosely pinned package versions, 1 for tagged production build
+export USE_FROZEN={{ use_frozen }}         # use 0 for loosely pinned package versions, 1 for tagged production build
 
 export ACCOUNT_ID={{ account_id }}
 export ECR_ACCOUNT_ID={{ ecr_account_id }} # set to ACCOUNT_ID for local ECR, or central account ID for central ECR

@@ -1,0 +1,11 @@
+- name: Setup terraform configs
+  hosts: localhost
+  connection: local
+
+  tasks:
+    - name: TEST creating file
+      copy:
+        dest: /home/ec2-user/terraform-deploy/foobar.txt
+        content: |
+          woop!
+          happy Monday :p 

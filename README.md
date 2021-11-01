@@ -1,7 +1,5 @@
 # jupyterhub-ci
 
----
-
 ### Rough notes...
 
-awsu ansible-playbook setup-jupyterhub.yml -i hosts.roman
+`awsu ansible-playbook setup-jupyterhub.yml -i hosts`

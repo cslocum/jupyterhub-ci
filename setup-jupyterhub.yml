@@ -3,43 +3,8 @@
   connection: local
 
   tasks:
-    - name: Get SSM parameters
-      set_fact:
-        env: "{{ lookup('aws_ssm', 'environment') }}"
-
-    - name: Get environment variables
-      set_fact:
-        account_id: "{{ lookup('env', 'ACCOUNT_ID') }}"
-        ecr_account_id: "{{ lookup('env', 'ECR_ACCOUNT_ID') }}"
-        admin_arn: "{{ lookup('env', 'ADMIN_ROLENAME') }}"
-
-    - name: Get admin role name from ARN
-      shell: echo {{ admin_arn }} | awk -F/ '{print $NF}'
-      register: admin_rolename
-
-    - name: Show gathered variables
-      debug:
-        msg:
-          - "env - {{ env }}"
-          - "account_id - {{ account_id }}"
-          - "ecr_account_id - {{ ecr_account_id }}"
-          - "admin_rolename - {{ admin_rolename.stdout }}"
-
-    - name: Check if setup-env exists
-      stat:
-        path: "{{ jh_dir }}/setup-env"
-      register: setup
-
-    - name: Backup setup-env if it exists
-      when: setup.stat.exists
-      # TODO: add a timestamp to the backups so repeat invocations don't overwrite the original file
-      #       https://stackoverflow.com/questions/57558178/how-to-create-latest-backup-file-every-time-in-ansible-using-time-stamp-how-to
-      command: mv "{{ jh_dir }}/setup-env" "{{ jh_dir }}/setup-env.ansible-backup"
-
-    - name: Create setup-env from template
-      template:
-        src: templates/setup-env.j2
-        dest: "{{ jh_dir }}/setup-env"
-
-
-# TODO: generate jupyterhub-deploy/deployments/<env>/<env>.tfvars
+    - name: Generate setup-env
+      include_tasks: generate-config.yml
+      vars:
+        config_path: "{{ jh_dir }}/setup-env"
+        template_path: "templates/jupyterhub/setup-env.j2"

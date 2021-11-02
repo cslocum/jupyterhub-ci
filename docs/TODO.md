@@ -1,6 +1,7 @@
 
 *** How can variables be shared between playbooks?
-
+    Have multiple "shells" on top of each playbook that does the variable collection,
+    then "includes" the other playbook
 
 ## terraform-deploy
 
